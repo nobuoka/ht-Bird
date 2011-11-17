@@ -2,7 +2,16 @@ use strict;
 use warnings;
 use Carp;
 
-package My::Bird::Database;
+package My::Bird::OnMemoryDatabase;
+
+sub new {
+    my $class = shift;
+    my $self  = bless {
+        "users"  => {},
+        "tweets" => [],
+    }, $class;
+    return $self;
+}
 
 sub add_user {
     my $self = shift;
@@ -99,15 +108,6 @@ sub select_followings {
         $self->__limit( \@followings, $cond{"limit"} );
     }
     return \@followings;
-}
-
-sub _new {
-    my $class = shift;
-    my $self  = bless {
-        "users"  => {},
-        "tweets" => [],
-    }, $class;
-    return $self;
 }
 
 sub __limit {

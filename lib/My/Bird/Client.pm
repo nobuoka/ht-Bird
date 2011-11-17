@@ -3,6 +3,14 @@ use warnings;
 
 package My::Bird::Client;
 
+sub new {
+    my $class = shift;
+    my $server = shift;
+    my $user_name = shift;
+    my $self = bless { "server" => $server, "user_name" => $user_name }, $class;
+    return $self;
+}
+
 sub tweet {
     my $self = shift;
     my $text = shift;
@@ -43,13 +51,4 @@ sub followers {
     $self->{"server"}->get_followers( $self->{"user_name"} );
 }
 
-sub _new {
-    my $class = shift;
-    my $server = shift;
-    my $user_name = shift;
-    my $self = bless { "server" => $server, "user_name" => $user_name }, $class;
-    return $self;
-}
-
 1;
-

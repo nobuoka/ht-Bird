@@ -2,10 +2,15 @@ use strict;
 use warnings;
 use Carp;
 
-use My::Bird::Client;
-use My::Bird::Database;
-
 package My::Bird::Server;
+
+sub new {
+    my $class = shift;
+    my $db = shift;
+    my $self  = bless {}, $class;
+    $self->{"db"} = $db;
+    return $self;
+}
 
 sub signup {
     my $self = shift;
@@ -13,7 +18,6 @@ sub signup {
     my $db = $self->{"db"};
     eval{ $db->add_user( $user_name ) };
     Carp::croak if $@;
-    My::Bird::Client->_new( $self, $user_name );
 }
 
 sub post_tweet {
@@ -60,12 +64,6 @@ sub get_followers {
     $self->{"db"}->select_followers( "user_name" => $user_name );
 }
 
-sub _new {
-    my $class = shift;
-    my $self  = bless {}, $class;
-    $self->{"db"} = My::Bird::Database->_new();
-    return $self;
-}
 
 1;
 
